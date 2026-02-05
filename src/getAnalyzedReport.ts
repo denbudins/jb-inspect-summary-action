@@ -53,13 +53,13 @@ export default function getAnalyzedReport(files: DotnetFormatTypes): AnalyzedRep
 
   // If there is any markdown error text, add it to the markdown output
   if (errorText.length) {
-    markdownText += '## $${\color{red}' + errorCount.toString() + ' Error(s):}$$\n';
+    markdownText += `## ${errorCount.toString()} Error(s):\n`;
     markdownText += errorText + '\n';
   }
 
   // If there is any markdown warning text, add it to the markdown output
   if (warningText.length) {
-    markdownText += '## $${\color{yellow}' + warningCount.toString() + ' Warning(s):}$$\n';
+    markdownText += `## ⚠️<span style="color:orange">${warningCount.toString()} Warning(s):</span>\n`;
     markdownText += warningText + '\n';
   }
 
