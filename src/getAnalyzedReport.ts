@@ -37,10 +37,10 @@ export default function getAnalyzedReport(files: DotnetFormatTypes): AnalyzedRep
         continue; // Skip if not error or warning
       }
 
-      let messageText = `### ${filePath}\` line \`${startLine.toString()}\n`;
+      let messageText = `### \`${filePath}\` line \`${startLine.toString()}\`\n`;
       messageText += `- Start Line:  ${startLine.toString()}\n`;
       messageText += `- End Line: ${endLine.toString()}\n`;
-      messageText += `- Message: ${message.text}\n`;
+      messageText += `- Message: \`${message.text}\`\n`;
 
       // Add the markdown text to the appropriate placeholder
       if (isWarning) {
@@ -53,13 +53,13 @@ export default function getAnalyzedReport(files: DotnetFormatTypes): AnalyzedRep
 
   // If there is any markdown error text, add it to the markdown output
   if (errorText.length) {
-    markdownText += '## ' + errorCount.toString() + ' Error(s):\n';
+    markdownText += `## \color{red}${errorCount.toString()} Error(s):\n`;
     markdownText += errorText + '\n';
   }
 
   // If there is any markdown warning text, add it to the markdown output
   if (warningText.length) {
-    markdownText += '## ' + warningCount.toString() + ' Warning(s):\n';
+    markdownText += `## \color{yellow}${warningCount.toString()} Warning(s):\n`;
     markdownText += warningText + '\n';
   }
 
