@@ -42,18 +42,15 @@ const fs_1 = __importDefault(require("fs"));
 const path_1 = __importDefault(require("path"));
 function parseReportFile(reportFile) {
     const reportPath = path_1.default.resolve(reportFile);
-    if (!fs_1.default.existsSync(reportPath)) {
+    if (!fs_1.default.existsSync(reportPath))
         throw new Error(`The report-json file "${reportFile}" could not be resolved.`);
-    }
-    const reportContents = fs_1.default.readFileSync(reportPath, 'utf-8');
-    let reportParsed;
     try {
-        reportParsed = JSON.parse(reportContents);
+        const reportContents = fs_1.default.readFileSync(reportPath, 'utf-8');
+        return JSON.parse(reportContents);
     }
     catch (error) {
         throw new Error(`Error parsing the report-json file "${reportFile}".`);
     }
-    return reportParsed;
 }
 /**
  * Converts a dotnet format report JSON file to an array of JavaScript objects
@@ -62,5 +59,17 @@ function parseReportFile(reportFile) {
 async function jsonReportToJs(reportFile) {
     const globber = await glob.create(reportFile);
     const files = await globber.glob();
-    return files.map(parseReportFile).flat();
+    if (files.length === 0)
+        throw new Error(`No files matched pattern: ${reportFile}`);
+    // Parse all files
+    const reports = files.map(parseReportFile);
+    if (reports.length === 1)
+        return reports[0];
+    // Merge all runs into one DotnetFormatTypes object
+    const base = reports[0];
+    const mergedRuns = reports.flatMap(r => r.runs);
+    return {
+        ...base,
+        runs: mergedRuns,
+    };
 }

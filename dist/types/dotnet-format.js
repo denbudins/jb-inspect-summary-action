@@ -17,6 +17,8 @@ var Level;
 (function (Level) {
     Level["Note"] = "note";
     Level["Warning"] = "warning";
+    Level["Error"] = "error";
+    Level["None"] = "none";
 })(Level || (exports.Level = Level = {}));
 var Tag;
 (function (Tag) {
@@ -189,9 +191,6 @@ function u(...typs) {
 }
 function o(props, additional) {
     return { props, additional };
-}
-function m(additional) {
-    return { props: [], additional };
 }
 function r(name) {
     return { ref: name };

@@ -1,5 +1,5 @@
 import * as core from '@actions/core';
-import * as fs from 'fs';
+// import * as fs from 'fs';
 import jsonReportToJs from './jsonReportToJs';
 import getAnalyzedReport from './getAnalyzedReport';
 // import { parseReport } from './parser';

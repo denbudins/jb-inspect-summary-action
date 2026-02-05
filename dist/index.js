@@ -37,16 +37,22 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const core = __importStar(require("@actions/core"));
+// import * as fs from 'fs';
 const jsonReportToJs_1 = __importDefault(require("./jsonReportToJs"));
+const getAnalyzedReport_1 = __importDefault(require("./getAnalyzedReport"));
 // import { parseReport } from './parser';
 // import { toMarkdown } from './markdown';
 async function run() {
     try {
         const reportPath = core.getInput('report.sarif');
         const reportJS = await (0, jsonReportToJs_1.default)(reportPath);
+        const analyzedReport = (0, getAnalyzedReport_1.default)(reportJS);
+        core.summary.addRaw(analyzedReport?.markdown || '');
+        await core.summary.write();
     }
     catch (err) {
         core.setFailed(err.message);
     }
+    process.exit(0);
 }
 run();
