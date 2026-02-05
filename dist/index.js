@@ -28217,7 +28217,7 @@ const getAnalyzedReport_1 = __importDefault(__nccwpck_require__(8808));
 // import { toMarkdown } from './markdown';
 async function run() {
     try {
-        const reportPath = core.getInput('report.sarif');
+        const reportPath = core.getInput('report-path', { required: true });
         const reportJS = await (0, jsonReportToJs_1.default)(reportPath);
         const analyzedReport = (0, getAnalyzedReport_1.default)(reportJS);
         core.summary.addRaw(analyzedReport?.markdown || '');

@@ -7,7 +7,7 @@ import getAnalyzedReport from './getAnalyzedReport';
 
 async function run() {
   try {
-    const reportPath = core.getInput('report.sarif');
+    const reportPath = core.getInput('report-path', { required: true });
     const reportJS = await jsonReportToJs(reportPath);
     const analyzedReport = getAnalyzedReport(reportJS);
     core.summary.addRaw(analyzedReport?.markdown || '');
