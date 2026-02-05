@@ -1,0 +1,24 @@
+name: 'Dotnet summary from Report JSON'
+description: 'Parse JSON report and publish markdown summary'
+
+inputs:
+  report-path:
+    description: 'Path or glob pattern to locate the dotnet format report JSON file'
+    required: true
+    default: 'report.sarif'
+  summary-title:
+    description: 'Title for the summary section'
+    required: false
+    default: ':NET Code Style Summary'
+  fail-on-warning:
+    description: "Fail the GitHub Action when dotnet format warnings are detected. Set to 'true' to enable."
+    default: 'false'
+    required: false
+  fail-on-error:
+    description: 'Whether to fail the Github action when dotnet format errors are detected. If set to false, the check that is created will still fail on dotnet format errors.'
+    default: 'true'
+    required: false
+
+runs:
+  using: 'node20'
+  main: 'dist/index.js'
