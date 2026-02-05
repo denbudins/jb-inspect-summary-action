@@ -1,21 +1,21 @@
-name: 'Dotnet summary from Report JSON'
-description: 'Parse JSON report and publish markdown summary'
+# GitHub Action: Dotnet summary from Report JSON
+# Parses a dotnet-format SARIF/JSON report and publishes a markdown summary to the workflow summary.
+# Optionally fails the workflow if warnings or errors are detected.
+
+name: 'Dotnet Format Report Summary'
+description: 'Parses a dotnet-format SARIF/JSON report, generates a markdown summary, and optionally fails the workflow on warnings/errors.'
 
 inputs:
   report-path:
-    description: 'Path or glob pattern to locate the dotnet format report JSON file'
+    description: 'Path or glob pattern to locate the dotnet-format SARIF/JSON report file (e.g. report.sarif)'
     required: true
     default: 'report.sarif'
-  summary-title:
-    description: 'Title for the summary section'
-    required: false
-    default: ':NET Code Style Summary'
   fail-on-warning:
-    description: "Fail the GitHub Action when dotnet format warnings are detected. Set to 'true' to enable."
+    description: "If set to 'true', the workflow will fail when dotnet-format warnings are detected."
     default: 'false'
     required: false
   fail-on-error:
-    description: 'Whether to fail the Github action when dotnet format errors are detected. If set to false, the check that is created will still fail on dotnet format errors.'
+    description: "If set to 'true', the workflow will fail when dotnet-format errors are detected. If set to 'false', the summary will still show errors but the workflow will not fail."
     default: 'true'
     required: false
 

@@ -10,11 +10,11 @@
     "noUnusedParameters": true,
     "noImplicitAny": true,
     "removeComments": false,
+    "rootDir": "./src",
     "preserveConstEnums": true,
     "outDir": "./dist",
-    "rootDir": "./src",
     "moduleResolution": "node"
   },
   "include": ["src/**/*.ts"],
-  "exclude": ["node_modules"]
+  "exclude": ["node_modules", "dist"]
 }

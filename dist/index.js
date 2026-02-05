@@ -28099,7 +28099,7 @@ const dotnet_format_1 = __nccwpck_require__(6858);
  * Analyzes a dotnet format report JS object and returns a report
  * @param files a JavaScript representation of a dotnet format JSON report
  */
-function getAnalyzedReport(files) {
+function getAnalyzedReport(files, failOnWarning, failOnError) {
     // Create markdown placeholder
     let markdownText = '';
     // Start the error and warning counts at 0
@@ -28144,16 +28144,16 @@ function getAnalyzedReport(files) {
     }
     // If there is any markdown error text, add it to the markdown output
     if (errorText.length) {
-        markdownText += `## ${errorCount.toString()} Error(s):\n`;
+        markdownText += `## ❌ ${errorCount.toString()} Error(s):\n`;
         markdownText += errorText + '\n';
     }
     // If there is any markdown warning text, add it to the markdown output
     if (warningText.length) {
-        markdownText += `## ⚠️<span style="color:orange">${warningCount.toString()} Warning(s):</span>\n`;
+        markdownText += `## ⚠️ ${warningCount.toString()} Warning(s):\n`;
         markdownText += warningText + '\n';
     }
     let success = errorCount === 0;
-    if (warningCount > 0) {
+    if ((errorCount > 0 && failOnError) || (warningCount > 0 && failOnWarning)) {
         success = false;
     }
     return {
@@ -28210,18 +28210,21 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 const core = __importStar(__nccwpck_require__(6966));
-// import * as fs from 'fs';
 const jsonReportToJs_1 = __importDefault(__nccwpck_require__(5482));
 const getAnalyzedReport_1 = __importDefault(__nccwpck_require__(8808));
-// import { parseReport } from './parser';
-// import { toMarkdown } from './markdown';
 async function run() {
     try {
         const reportPath = core.getInput('report-path', { required: true });
+        const failOnWarning = core.getInput('fail-on-warning') === 'true';
+        const failOnError = core.getInput('fail-on-error') === 'true';
         const reportJS = await (0, jsonReportToJs_1.default)(reportPath);
-        const analyzedReport = (0, getAnalyzedReport_1.default)(reportJS);
+        const analyzedReport = (0, getAnalyzedReport_1.default)(reportJS, failOnWarning, failOnError);
         core.summary.addRaw(analyzedReport?.markdown || '');
         await core.summary.write();
+        if (analyzedReport?.success == false) {
+            core.setFailed(`${analyzedReport.errorCount} errors and ${analyzedReport.warningCount} warnings`);
+            process.exit(1);
+        }
     }
     catch (err) {
         core.setFailed(err.message);

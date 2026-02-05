@@ -5,7 +5,7 @@ import { DotnetFormatTypes, Level } from './types/dotnet-format';
  * Analyzes a dotnet format report JS object and returns a report
  * @param files a JavaScript representation of a dotnet format JSON report
  */
-export default function getAnalyzedReport(files: DotnetFormatTypes): AnalyzedReport | undefined {
+export default function getAnalyzedReport(files: DotnetFormatTypes, failOnWarning: boolean, failOnError: boolean): AnalyzedReport | undefined {
   // Create markdown placeholder
   let markdownText = '';
   // Start the error and warning counts at 0
@@ -53,20 +53,21 @@ export default function getAnalyzedReport(files: DotnetFormatTypes): AnalyzedRep
 
   // If there is any markdown error text, add it to the markdown output
   if (errorText.length) {
-    markdownText += `## ${errorCount.toString()} Error(s):\n`;
+    markdownText += `## ❌ ${errorCount.toString()} Error(s):\n`;
     markdownText += errorText + '\n';
   }
 
   // If there is any markdown warning text, add it to the markdown output
   if (warningText.length) {
-    markdownText += `## ⚠️<span style="color:orange">${warningCount.toString()} Warning(s):</span>\n`;
+    markdownText += `## ⚠️ ${warningCount.toString()} Warning(s):\n`;
     markdownText += warningText + '\n';
   }
 
   let success = errorCount === 0;
-  if (warningCount > 0) {
+  if ((errorCount > 0 && failOnError) || (warningCount > 0 && failOnWarning)) {
     success = false;
   }
+
   return {
     errorCount,
     warningCount,
