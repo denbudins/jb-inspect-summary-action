@@ -28144,12 +28144,12 @@ function getAnalyzedReport(files) {
     }
     // If there is any markdown error text, add it to the markdown output
     if (errorText.length) {
-        markdownText += `## \color{red}${errorCount.toString()} Error(s):\n`;
+        markdownText += '## $${\color{red}' + errorCount.toString() + ' Error(s):}$$\n';
         markdownText += errorText + '\n';
     }
     // If there is any markdown warning text, add it to the markdown output
     if (warningText.length) {
-        markdownText += `## \color{yellow}${warningCount.toString()} Warning(s):\n`;
+        markdownText += '## $${\color{yellow}' + warningCount.toString() + ' Warning(s):}$$\n';
         markdownText += warningText + '\n';
     }
     let success = errorCount === 0;
